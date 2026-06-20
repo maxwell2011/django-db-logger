@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="main">
+    <h2>System Logs</h2>
+    <section>
+        {% include 'server_logs_download.html' %}
+        <form action="/logs" method="get" class="tool-bar"></form>
+    </section>
+    <br/>
+    <section>
+        <h3>Errors</h3>
+        <button hx-post="/logs/download/error_logs">
+            Download
+        </button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Logger</th>
+                    <th>Level</th>
+                    <th>Module</th>
+                    <th>Line</th>
+                    <th>Process</th>
+                    <th>Thread</th>
+                    <th>Traceback</th>
+                </tr>
+            </thead>
+            {% for l in server_errors %}
+            <tr>
+                <td>{{l.asctime}}</td>
+                <td>{{l.logger}}</td>
+                <td>{{l.levelname}}</td>
+                <td>{{l.module}}</td>
+                <td>{{l.lineno}}</td>
+                <td>{{l.pid}}</td>
+                <td>{{l.tid}}</td>  
+                <td>{{l.trace}}</td>          
+            </tr>
+            
+            {% endfor %}
+        </table>
+        
+    </section>
+    <br/>
+    <section>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Logger</th>
+                    <th>Level</th>
+                    <th>Module</th>
+                    <th>Line</th>
+                    <th>Process</th>
+                    <th>Thread</th>
+                    <th>Message</th>
+                    <th>Traceback</th>
+                </tr>
+            </thead>
+            {% for l in server_logs %}
+            <tr>
+                <td>{{l.asctime}}</td>
+                <td>{{l.logger}}</td>
+                <td>{{l.levelname}}</td>
+                <td>{{l.module}}</td>
+                <td>{{l.lineno}}</td>
+                <td>{{l.pid}}</td>
+                <td>{{l.tid}}</td>
+                <td>{{l.msg}}</td>
+                <td>{{l.trace}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+    </section>
+    
+    <form>
+        <label for="search">Settings Gear Activated!</label>
+        <input id="search" name="q" type="search" placeholder="Find a Setting...">
+        <button hx-post="/settings/" hx-target="#main">
+            Help Me Obi-Wan Kenobi!
+        </button>
+    </form>
+</div>
+{% endblock content %}
+
+
+
+
