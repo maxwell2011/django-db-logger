@@ -1,5 +1,6 @@
 django
-six
+django-import-export
+django-htmx
 twine
 wheel
 setuptools_scm
