@@ -1,0 +1,17 @@
+<div id="server-logs-download" hx-target="this" hx-swap="outerHTML">
+    {% if logs_archiver.status == "waiting" %}
+    <button hx-post="/logs/download/">
+        Download Server Logs
+    </button>
+    {% elif logs_archiver.status == "running" %}
+    <div hx-get="/logs/download/status/" hx-trigger="load delay:500ms">
+        Collecting Logs...
+        <div class="progress">
+            <div class="progress-bar" role="progressbar"></div>
+        </div>
+    </div>
+    {% elif logs_archiver.status == "complete" %}
+    <a hx-boost="false" href="/logs/download/file/">Ready! &downarrow;</a>
+    <button hx-delete="/logs/download/">Clear</button>
+    {% endif %}
+</div>

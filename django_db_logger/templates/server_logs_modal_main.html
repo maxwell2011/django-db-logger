@@ -1,0 +1,82 @@
+{% extends "modal_base.html" %}
+
+{% load static %}
+{% block body %}
+{% block modal_header %}System Logs{% endblock modal_header %}
+<h3>Main</h3>
+{% block modal_content_primary %}
+{% if page_obj.paginator.count == 0 %}
+  <p>We have no logs!</p>
+{% else %}
+  {% include "server_logs_paging_controls.html" %}
+{% endif %}
+
+<div
+      id="system-logs-list-main"
+      hx-get="."
+      hx-trigger="systemLogCreated from:body"
+      hx-vals='{"use_block": "system-logs-list"}'
+      hx-target="#system-logs-list"
+      hx-swap="outerHTML"
+    >
+      {% if logs %}
+        <table>
+          <thead>
+            <tr>
+                <th>Time</th>
+                <th>Logger</th>
+                <th>Level</th>
+                <th>Module</th>
+                <th>Line</th>
+                <th>Process</th>
+                <th>Thread</th>
+                <th>Message</th>
+                <th>Traceback</th>
+            </tr>
+          </thead>
+          {% for log_entry in logs %}
+            <tr>
+                <td>{{log_entry.asctime}}</td>
+                <td>{{log_entry.logger}}</td>
+                <td>{{log_entry.levelname}}</td>
+                <td>{{log_entry.module}}</td>
+                <td>{{log_entry.lineno}}</td>
+                <td>{{log_entry.pid}}</td>
+                <td>{{log_entry.tid}}</td>
+                <td>{{log_entry.msg}}</td>
+                <td>{{log_entry.trace}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>There are no logs</p>
+      {% endif %}
+    </div>
+{% endblock modal_content_primary %}
+{% block modal_content_secondary %}
+<br/>
+{% endblock modal_content_secondary %}
+{% block modal_content_buttons %}
+<button
+    hx-trigger="click"
+    hx-get="{% url 'server_logs_flush_debug_main' %}"
+    hx-target="body"
+    hx-swap="beforeend"
+  >Flush Debug</button>
+<button
+    hx-trigger="click"
+    hx-get="{% url 'server_logs_flush_info_main' %}"
+    hx-target="body"
+    hx-swap="beforeend"
+  >Flush Info</button>
+  <button
+    hx-trigger="click"
+    hx-get="{% url 'server_logs_download_logfile_main' %}"
+    hx-target="body"
+    hx-swap="beforeend"
+  >Download Log File</button>
+{% endblock modal_content_buttons %}
+{% block modal_content_footer %}
+<br/>
+{% endblock modal_content_footer %}
+{% endblock body %}
